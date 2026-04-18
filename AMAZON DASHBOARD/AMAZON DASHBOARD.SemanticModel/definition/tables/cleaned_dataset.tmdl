@@ -1,0 +1,159 @@
+table cleaned_dataset
+	lineageTag: 319e0e74-ab66-493e-a484-348e8830d5f3
+
+	measure 'AVERAGE RATING' = AVERAGE(cleaned_dataset[rating])
+		lineageTag: 1fcea8c5-00b8-48de-9d64-5fbae565de6f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PROFIT MARGIN %' = DIVIDE(SUM(cleaned_dataset[profit]),SUM(cleaned_dataset[total_revenue]))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 72385a77-e3c3-4aa8-a430-8eac444f45c8
+
+	column order_id
+		dataType: int64
+		formatString: 0
+		lineageTag: cbd6a15c-167d-447b-976e-f85c3bc8d730
+		summarizeBy: count
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = User
+
+	column order_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3014ad3e-19b4-46e5-b753-24285e5232bd
+		summarizeBy: none
+		sourceColumn: order_date
+
+		variation Variation
+			isDefault
+			relationship: 97469426-18c4-46c1-8378-18ac9aad7a95
+			defaultHierarchy: LocalDateTable_749f2229-832a-4380-aef1-d20d8ec949b5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: dafcbb9b-54f3-40b0-863a-03d5ca23e55b
+		summarizeBy: sum
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_category
+		dataType: string
+		lineageTag: e8b95442-5980-4a93-93c3-c7d2bc04d935
+		summarizeBy: none
+		sourceColumn: product_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column price
+		dataType: double
+		lineageTag: 622bbe3a-0fdd-498d-967c-0178a1a69101
+		summarizeBy: sum
+		sourceColumn: price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column discount_percent
+		dataType: int64
+		formatString: 0
+		lineageTag: 3cb39cf4-eabf-44d7-a23d-711397ef9f50
+		summarizeBy: none
+		sourceColumn: discount_percent
+
+		annotation SummarizationSetBy = User
+
+	column quantity_sold
+		dataType: int64
+		formatString: 0
+		lineageTag: af2d67a9-8234-4d89-ba27-80176d880206
+		summarizeBy: sum
+		sourceColumn: quantity_sold
+
+		annotation SummarizationSetBy = User
+
+	column customer_region
+		dataType: string
+		lineageTag: d6bc45ea-b9cf-4538-9c57-357c6be6646c
+		summarizeBy: none
+		sourceColumn: customer_region
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		lineageTag: d8d818a0-2289-4be8-a131-8796f3e3780f
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column rating
+		dataType: double
+		lineageTag: b6cb564c-9289-4513-b9d6-fa2161d1a866
+		summarizeBy: average
+		sourceColumn: rating
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column review_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 104988b8-fa49-4430-bbd2-ae518f151943
+		summarizeBy: sum
+		sourceColumn: review_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column discounted_price
+		dataType: double
+		lineageTag: 0a8b14be-40ac-4681-9f4e-1e299f70ae59
+		summarizeBy: none
+		sourceColumn: discounted_price
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_revenue
+		dataType: double
+		lineageTag: fd04d802-ba4c-46a9-9f22-dc09d3aed473
+		summarizeBy: none
+		sourceColumn: total_revenue
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column profit
+		dataType: double
+		lineageTag: f245d276-35ec-48c1-a935-b78d237fbd9a
+		summarizeBy: sum
+		sourceColumn: profit
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition cleaned_dataset = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Riya\OneDrive\Documents\AMAZONE SALES ANALYSIS\Excel data\cleaned_dataset.csv"),[Delimiter=",", Columns=14, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order_id", Int64.Type}, {"order_date", type date}, {"product_id", Int64.Type}, {"product_category", type text}, {"price", type number}, {"discount_percent", Int64.Type}, {"quantity_sold", Int64.Type}, {"customer_region", type text}, {"payment_method", type text}, {"rating", type number}, {"review_count", Int64.Type}, {"discounted_price", type number}, {"total_revenue", type number}, {"profit", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

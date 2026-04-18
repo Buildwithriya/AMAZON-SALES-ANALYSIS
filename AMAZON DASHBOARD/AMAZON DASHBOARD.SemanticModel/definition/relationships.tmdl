@@ -1,0 +1,5 @@
+relationship 97469426-18c4-46c1-8378-18ac9aad7a95
+	joinOnDateBehavior: datePartOnly
+	fromColumn: cleaned_dataset.order_date
+	toColumn: LocalDateTable_749f2229-832a-4380-aef1-d20d8ec949b5.Date
+
